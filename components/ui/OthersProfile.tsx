@@ -26,9 +26,10 @@ import axios from 'axios'
 import { AuthProvider } from '@/hooks/AuthProvider'
 import { signOut } from '@/auth'
 import { Loader2 } from 'lucide-react'
+import { Account } from '@prisma/client'
 
 interface Others_Profile_props {
-  account: account
+  account: Account
 }
 
 interface account {
@@ -57,7 +58,8 @@ interface account {
 
 const Others_Profile: React.FC<Others_Profile_props> = ({ account }) => {
   const id = AuthProvider()
-  const [flag, setFlag] = useState(false)
+  const [acc, setAcc] = useState('')
+  const [flag, setFlag] = useState(true)
   const addFriend = () => {
     axios
       .post('/api/addFriend', { account, id })
@@ -71,15 +73,36 @@ const Others_Profile: React.FC<Others_Profile_props> = ({ account }) => {
         }
       })
   }
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const accId = await returnId(id!)
+      setAcc(accId)
+    } catch (error) {
+      console.error('Error fetching account ID:', error)
+    }
+  }
+
+  fetchData()
+
+  // Define an async function to fetch the account ID
+  async function returnId(id:string) {
+    const acc = await getAccountByUserId(id)
+    return acc.id
+  }
+}, [id])
+
 
   useEffect(() => {
     // Check if the id is present in the array
     if (id !== undefined) {
-      const checkFriend = account?.follow || []
-      const isIdPresent = checkFriend.includes(id)
+      const checkFriend = account?.friends || []
+      console.log(checkFriend)
+      const isIdPresent = checkFriend.includes(acc)
+      console.log(isIdPresent)
       setFlag(isIdPresent)
     }
-  }, [id, account])
+  }, [id, account, acc])
 
   const [open, setOpen] = useState<boolean | undefined>(false)
   return (
@@ -123,7 +146,7 @@ const Others_Profile: React.FC<Others_Profile_props> = ({ account }) => {
                     </Link>
                   </div>
                 </div>
-                {flag ? (
+                {!flag ? (
                   <Button onClick={addFriend}>Add friend</Button>
                 ) : (
                   <Button>Already a friend</Button>

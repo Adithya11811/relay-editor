@@ -1,5 +1,6 @@
 'use server'
 import { db } from '@/lib/db'
+import { Account } from '@prisma/client'
 export const getUserByEmail = async (email: string) => {
   try {
     const user = await db.user.findUnique({ where: { email } })
@@ -49,7 +50,7 @@ export const getAccountByAccountName = async (name: string) => {
         username: name,
       },
     })
-    return account
+    return account as Account
   } catch (e) {
     return e
   }
@@ -188,3 +189,19 @@ export const getsubreditorfromslug = async(id :string, name:string) => {
     throw e
   }
 }
+
+// export const getHostByProjectID = async (pid: string) => {
+//   try {
+//     const projData = await db.project.findUnique({
+//       where: {
+//         projectId: pid,
+//       },
+//       select: {
+//         creator: true,
+//       },
+//     })
+//     return projData
+//   } catch (e) {
+//     return e
+//   }
+// }

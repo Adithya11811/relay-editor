@@ -58,7 +58,7 @@ const Post: FC<PostProps> = ({
               <>
                 <a
                   className="underline text-slate-300 text-sm underline-offset-2"
-                  href={`discussions/re/${subredditName}`}
+                  href={`${subredditName}`}
                 >
                   re/{subredditName}
                 </a>

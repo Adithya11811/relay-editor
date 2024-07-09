@@ -219,6 +219,7 @@ export const UpdateACC = ({acc}:UpdateACCProps) => {
                         disabled={isPending}
                         placeholder="John Doe"
                         type="text"
+                        
                         // onChange={handleChange}
                         value={acc.username}
                         className="text-slate-300"

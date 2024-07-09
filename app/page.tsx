@@ -10,7 +10,7 @@ import Aboutus from '@/components/ui/Aboutus';
 
 const page = () => {
   return (
-    <div className='bg-black'>
+    <div className='bg-black' id='main-container'>
       <Navbar/>
       <Hero />
       <Enter/>

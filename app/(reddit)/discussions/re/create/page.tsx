@@ -63,7 +63,7 @@ const Page = () => {
       })
     },
     onSuccess: (data) => {
-      router.push(`discussions/re/${data}`)
+      router.push(`${data}`)
     },
   })
 

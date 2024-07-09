@@ -1,7 +1,6 @@
 'use client';
 import { useRef, useEffect } from 'react'
 import styles from './styles.module.css'
-import HorizontalScrollCarousel from '../horizontalscroll';
 
 interface HomeProps {}
 
@@ -21,7 +20,7 @@ const Enter: React.FC<HomeProps> = () => {
   const animate = (): void => {
     const maskSizeProgress: number = targetMaskSize * getScrollProgress()
     if (stickyMask.current)
-      stickyMask.current.style.webkitMaskSize =
+      stickyMask.current.style.maskSize =
         (initialMaskSize + maskSizeProgress) * 100 + '%'
     requestAnimationFrame(animate)
   }

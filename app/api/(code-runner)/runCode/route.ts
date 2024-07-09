@@ -11,16 +11,17 @@ const requestCounts = new Map();
 
 export async function POST(request: NextRequest) {
     let { code, language } = await request.json();
-    const docker = new Dockerode();
+    const docker = new Dockerode()
+    console.log(docker)
     try {
         // Check if the IP address has exceeded the rate limit
         const clientIP = request?.remoteAddr;
         const currentTimestamp = Date.now();
         const windowStart = currentTimestamp - RATE_LIMIT_WINDOW_MS;
-
+        console.log(clientIP)
         // Get the request count for the current IP address within the window
         const count = requestCounts.get(clientIP) || 0;
-
+        console.log(count)
         // If the request count exceeds the limit, return a rate limit error
         if (count >= MAX_REQUESTS_PER_WINDOW) {
             return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
@@ -39,12 +40,12 @@ export async function POST(request: NextRequest) {
         // Determine Docker image and command based on language
         switch (language) {
             case 'python':
-                image = `${process.env.AZURE_PATH}.azurecr.io/python:latest`;
+                image = `python:latest`;
                 command = ['python', '-c', code];
                 break;
             case 'javascript':
             case 'typescript':
-                image = `${process.env.AZURE_PATH}.azurecr.io/node`;
+                image = `node`;
 
                 command = ['node', '-e', code];
                 break;
@@ -52,14 +53,14 @@ export async function POST(request: NextRequest) {
                 code = removeCommentsCpp(code);
                 // Escape double quotes in the code
                 code = code.replace(/"/g, '\\"');
-                image = `${process.env.AZURE_PATH}.azurecr.io/gcc:latest`;
+                image = `gcc:latest`;
                 command = ['bash', '-c', `echo "${code}" > /tmp/code.c && gcc /tmp/code.c -o /tmp/code && /tmp/code`];
                 break;
             case 'cpp':
                 code = removeCommentsCpp(code);
                 // Escape single and double quotes in the code
                 // code = code.replace(/'/g, "\\'").replace(/"/g, '\\"');
-                image = `${process.env.AZURE_PATH}.azurecr.io/gcc:latest`;
+                image = `gcc:latest`;
                 command = [
                     'bash',
                     '-c',

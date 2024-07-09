@@ -2,6 +2,7 @@
 import Others_Profile from '@/components/ui/OthersProfile'
 import { getAccountByAccountName } from '@/data/user'
 import { AuthProvider } from '@/hooks/AuthProvider'
+import { Account } from '@prisma/client'
 import { redirect, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
